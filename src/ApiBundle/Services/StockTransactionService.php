@@ -10,6 +10,7 @@ namespace ApiBundle\Services;
 
 use ApiBundle\Builder\StockTransactionBuilder;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Util\Debug;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -35,7 +36,16 @@ class StockTransactionService
 
     public function fetchStockTransactionList(){
         $stockTransactions = $this->em->getRepository('AppBundle:StockTransaction')->findAll();
-        $result["result"] = $stockTransactions;
+        $i=0;
+        foreach($stockTransactions as $stockTransaction){
+            $result["result"][$i]["id"] =  $stockTransaction->getId();
+            $result["result"][$i]["item_id"] =  $stockTransaction->getItemId();
+            $result["result"][$i]["quantity"] =  $stockTransaction->getQuantity();
+            $result["result"][$i]["confirmation_status"] =  $stockTransaction->getConfirmationStatus();
+            $result["result"][$i]["incoming_stock"] =  $stockTransaction->getIncomingStock();
+            $i++;
+        }
+
         $result["statusCode"] = Response::HTTP_OK;
         return $result;
     }

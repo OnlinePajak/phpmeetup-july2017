@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Controller;
 
+use Doctrine\Common\Util\Debug;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -17,6 +18,7 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @\FOS\RestBundle\Controller\Annotations\Route("/api")
@@ -48,7 +50,7 @@ class StockTransactionController extends FOSRestController
                 $response["statusCode"] = Response::HTTP_BAD_REQUEST;
             }
         }
-        return $this->view($response,200);
+        return new Response(json_encode($response));
     }
 
     /**
