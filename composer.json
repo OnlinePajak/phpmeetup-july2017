@@ -31,7 +31,7 @@
         "symfony/polyfill-apcu": "^1.0",
         "symfony/swiftmailer-bundle": "^2.3.10",
         "jms/serializer-bundle": "dev-master",
-        "symfony/symfony": "3.3.*",
+        "symfony/symfony": "2.5.*",
         "twig/twig": "^1.0||^2.0",
         "nelmio/api-doc-bundle": "2.13.1"
     },
