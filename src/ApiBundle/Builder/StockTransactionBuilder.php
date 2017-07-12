@@ -20,7 +20,9 @@ class StockTransactionBuilder
         }
         $stockTransaction->setIncomingStock($params["incoming_stock"]);
         $stockTransaction->setQuantity($params["quantity"]);
-        $stockTransaction->setItem($item);
+        $stockTransaction->setItemId($params['item_id']);
+        $stockTransaction->setConfirmationStatus($params['confirmation_status']);
+        //echo "<pre>"; print_r($stockTransaction);exit;
         return $stockTransaction;
     }
 }
