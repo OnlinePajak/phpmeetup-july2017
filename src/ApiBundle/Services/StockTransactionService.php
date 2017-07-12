@@ -111,7 +111,6 @@ class StockTransactionService
             throw new \Exception('Something went wrong! The id is not available.');
         }
 
-
     }
 
 }
