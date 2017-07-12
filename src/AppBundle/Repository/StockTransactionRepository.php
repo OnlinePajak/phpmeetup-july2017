@@ -12,8 +12,5 @@ use AppBundle\Entity\StockTransaction;
  */
 class StockTransactionRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function confirmStockTransaction(StockTransaction $stockTransaction){
-        $stockTransaction->setConfirmationStatus(1);
-        return $stockTransaction;
-    }
+
 }

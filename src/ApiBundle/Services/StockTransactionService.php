@@ -36,25 +36,14 @@ class StockTransactionService
 
     public function fetchStockTransactionList(){
         $stockTransactions = $this->em->getRepository('AppBundle:StockTransaction')->findAll();
-        $i=0;
-        foreach($stockTransactions as $stockTransaction){
-            $result["result"][$i]["id"] =  $stockTransaction->getId();
-            $result["result"][$i]["item_id"] =  $stockTransaction->getItemId();
-            $result["result"][$i]["quantity"] =  $stockTransaction->getQuantity();
-            $result["result"][$i]["confirmation_status"] =  $stockTransaction->getConfirmationStatus();
-            $result["result"][$i]["incoming_stock"] =  $stockTransaction->getIncomingStock();
-            $i++;
-        }
+        $result["result"] = $stockTransactions;
         $result["statusCode"] = Response::HTTP_OK;
         return $result;
     }
 
     public function fetchStockTransactionDetail($id){
         $stockTransaction = $this->em->getRepository('AppBundle:StockTransaction')->find($id);
-        $result["result"][0]["id"] =  $stockTransaction->getId();
-        $result["result"][0]["item_id"] =  $stockTransaction->getItemId();
-        $result["result"][0]["quantity"] =  $stockTransaction->getQuantity();
-        $result["result"][0]["confirmation_status"] =  $stockTransaction->getConfirmationStatus();
+        $result["result"] = $stockTransaction;
         $result["statusCode"] = Response::HTTP_OK;
         return $result;
     }
@@ -65,30 +54,27 @@ class StockTransactionService
         $this->em->persist($stockTransaction);
         $this->em->flush();
 
-        $result["result"]['id'] = $stockTransaction->getId();
-        $result["result"]['itemId'] = $stockTransaction->getItemId();
-        $result["result"]['quantity'] = $stockTransaction->getQuantity();
-        $result["result"]['incomingStock'] = $stockTransaction->getIncomingStock();
-        $result["result"]['confirmationStatus'] = $stockTransaction->getConfirmationStatus();
+        $result["result"] = $stockTransaction;
         $result["statusCode"] = Response::HTTP_OK;
         return $result;
     }
 
     public function updateStockTransaction($input){
-        $stockTransaction = $this->fetchStockTransactionDetail($input["stock_transaction_id"]);
-        $item = $this->itemService->fetchItem($input["item_id"]);
+        $stockTransactionObject = $this->em->getRepository('AppBundle:StockTransaction')->find($input["id"]);
+        $itemObject = $this->em->getRepository('AppBundle:Item')->find($stockTransactionObject->getItemId());
         $stockTransaction = $this->stockTransactionBuilder->buildStockTransaction($input,$item,$stockTransaction);
         $this->em->persist($stockTransaction);
         $this->em->flush();
+
         $result["result"] = $stockTransaction;
         $result["statusCode"] = Response::HTTP_OK;
         return $result;
     }
 
     public function confirmStockTransaction($id){
-        $stockTransaction = $this->fetchStockTransactionDetail($id);
-        $stockTransaction = $this->em->getRepository('AppBundle:StockTransaction')->confirmStockTransaction($stockTransaction);
-        $result["result"] = $stockTransaction;
+        $stockTransactionObject = $this->em->getRepository('AppBundle:StockTransaction')->find($id);
+        $itemObject = $this->em->getRepository('AppBundle:Item')->find($stockTransactionObject->getItemId());
+
         $result["statusCode"] = Response::HTTP_OK;
         return $result;
     }

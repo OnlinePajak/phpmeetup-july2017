@@ -14,15 +14,14 @@ use Doctrine\ORM\EntityManager;
 
 class StockTransactionBuilder
 {
-    public function buildStockTransaction($params, $item, $stockTransaction = null){
+    public function buildStockTransaction($params, $stockTransaction = null){
         if($stockTransaction == null){
             $stockTransaction = new StockTransaction();
         }
         $stockTransaction->setIncomingStock($params["incoming_stock"]);
         $stockTransaction->setQuantity($params["quantity"]);
         $stockTransaction->setItemId($params['item_id']);
-        $stockTransaction->setConfirmationStatus($params['confirmation_status']);
-        //echo "<pre>"; print_r($stockTransaction);exit;
+        $stockTransaction->setConfirmationStatus(0);
         return $stockTransaction;
     }
 }

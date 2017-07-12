@@ -37,8 +37,7 @@ class ItemController extends FOSRestController
      * @Route(requirements={"_format"="json|xml"})
      *
      * Get Route annotation.
-     * @Get("/items")
-     * @return \FOS\RestBundle\View\View
+     * @Get("/items/list")
      */
     public function getItemsAction()
     {

@@ -23,17 +23,11 @@ class UserService
     }
 
     public function fetchUser($id){
-        try{
-            $user = $this->em->getRepository('AppBundle:User')->find($id);
-        } catch (Exception $e) {
-            if($e->getMessage()!=null){
-                $response['message'] = $e->getMessage();
-
-                $statusCode = Codes::HTTP_BAD_REQUEST;
-
-                return  $this->view($response,$statusCode);
-            }
-        }
-        return array("message" => "success", "user" => $user, "statusCode" => Response::HTTP_OK);
+        $user = $this->em->getRepository('AppBundle:User')->find($id);
+        $result["result"][0]["id"] =  $user->getId();
+        $result["result"][0]["name"] =  $user->getName();
+        $result["result"][0]["email"] =  $user->getEmail();
+        $result["statusCode"] = Response::HTTP_OK;
+        return $result;
     }
 }
