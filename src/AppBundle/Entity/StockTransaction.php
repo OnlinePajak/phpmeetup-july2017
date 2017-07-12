@@ -22,11 +22,11 @@ class StockTransaction
     private $id;
 
     /**
-     * @var int
+     * @ORM\ManyToOne(targetEntity="Item", inversedBy="stock_transaction", cascade={"persist"})
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
      *
-     * @ORM\Column(name="item_id", type="integer")
      */
-    private $itemId;
+    private $item;
 
     /**
      * @var int
@@ -61,27 +61,26 @@ class StockTransaction
     }
 
     /**
-     * Set itemId
+     * Set Item
      *
-     * @param integer $itemId
-     *
+     * @param Item $item
      * @return StockTransaction
      */
-    public function setItemId($itemId)
+    public function setItem(Item $item = null)
     {
-        $this->itemId = $itemId;
+        $this->item = $item;
 
         return $this;
     }
 
     /**
-     * Get itemId
+     * Get item
      *
-     * @return int
+     * @return Item
      */
-    public function getItemId()
+    public function getItem()
     {
-        return $this->itemId;
+        return $this->item;
     }
 
     /**

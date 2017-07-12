@@ -35,6 +35,13 @@ class Item
      */
     private $quantity;
 
+    /**
+     * @var stockTransaction
+     * @ORM\OneToMany(targetEntity="StockTransaction", mappedBy="item", cascade={"persist","remove"})
+     *
+     */
+    private $stockTransaction;
+
 
     /**
      * Get id
@@ -92,6 +99,24 @@ class Item
     public function getQuantity()
     {
         return $this->quantity;
+    }
+
+    /**
+     * @param ArrayCollection $stockTransaction
+     */
+    public function setStockTransaction($stockTransaction)
+    {
+        $this->stockTransaction = $stockTransaction;
+    }
+
+    /**
+     * Get stockTransaction
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getStockTransaction()
+    {
+        return $this->stockTransaction;
     }
 }
 
