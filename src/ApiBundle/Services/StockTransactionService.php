@@ -45,14 +45,16 @@ class StockTransactionService
             $result["result"][$i]["incoming_stock"] =  $stockTransaction->getIncomingStock();
             $i++;
         }
-
         $result["statusCode"] = Response::HTTP_OK;
         return $result;
     }
 
     public function fetchStockTransactionDetail($id){
         $stockTransaction = $this->em->getRepository('AppBundle:StockTransaction')->find($id);
-        $result["result"] = $stockTransaction;
+        $result["result"][0]["id"] =  $stockTransaction->getId();
+        $result["result"][0]["item_id"] =  $stockTransaction->getItemId();
+        $result["result"][0]["quantity"] =  $stockTransaction->getQuantity();
+        $result["result"][0]["confirmation_status"] =  $stockTransaction->getConfirmationStatus();
         $result["statusCode"] = Response::HTTP_OK;
         return $result;
     }
