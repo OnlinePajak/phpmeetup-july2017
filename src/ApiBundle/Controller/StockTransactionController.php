@@ -161,7 +161,7 @@ class StockTransactionController extends FOSRestController
      * @ApiDoc(
      *   resource = true,
      *   section= "Stock Transaction",
-     *   description = "Confirms a stock transaction",
+     *   description = "Delete a stock transaction",
      *   views = {"meetup"}
      * )
      *
@@ -176,6 +176,38 @@ class StockTransactionController extends FOSRestController
     {
         try {
             $response = $this->get('meetup.api.stock_transaction')->confirmStockTransaction($id);
+        } catch (Exception $e) {
+            if($e->getMessage()!=null){
+                $response['result'] = $e->getMessage();
+                $response["statusCode"] = Response::HTTP_BAD_REQUEST;
+            }
+        }
+
+        return new Response(json_encode($response));
+    }
+
+    /**
+     * @ApiDoc(
+     *   resource = true,
+     *   section= "Stock Transaction",
+     *   description = "Creates a new sales invoice from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when bad parameters are passed"
+     *   },
+     *     views = {"meetup"}
+     * )
+     *
+     *
+     * @Route(requirements={"_format"="json|xml"})
+     *
+     * DELETE Route annotation.
+     * @Delete("/stock_transaction/{id}")
+     */
+    public function DeleteStockTransactionAction($id)
+    {
+        try {
+            $response = $this->get('meetup.api.stock_transaction')->removeStockTransaction($id);
         } catch (Exception $e) {
             if($e->getMessage()!=null){
                 $response['result'] = $e->getMessage();
