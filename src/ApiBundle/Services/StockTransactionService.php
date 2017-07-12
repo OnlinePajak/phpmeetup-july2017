@@ -1,0 +1,79 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Ardi
+ * Date: 07/07/2017
+ * Time: 16.25
+ */
+
+namespace ApiBundle\Services;
+
+use ApiBundle\Builder\StockTransactionBuilder;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+use Symfony\Bridge\Monolog\Logger;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class StockTransactionService
+{
+    private $em;
+    private $itemService;
+    private $stockTransactionBuilder;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+        $this->itemService = new ItemService($em);
+        $this->stockTransactionBuilder = new StockTransactionBuilder();
+    }
+
+    public function fetchStockTransactionList(){
+        $stockTransactions = $this->em->getRepository('AppBundle:StockTransaction')->findAll();
+        $result["result"] = $stockTransactions;
+        $result["statusCode"] = Response::HTTP_OK;
+        return $result;
+    }
+
+    public function fetchStockTransactionDetail($id){
+        $stockTransaction = $this->em->getRepository('AppBundle:StockTransaction')->find($id);
+        $result["result"] = $stockTransaction;
+        $result["statusCode"] = Response::HTTP_OK;
+        return $result;
+    }
+
+    public function createStockTransaction($input){
+        $item = $this->itemService->fetchItem($input["item_id"]);
+        $stockTransaction = $this->stockTransactionBuilder->buildStockTransaction($input,$item);
+        $this->em->persist($stockTransaction);
+        $this->em->flush();
+        $result["result"] = $stockTransaction;
+        $result["statusCode"] = Response::HTTP_OK;
+        return $result;
+    }
+
+    public function updateStockTransaction($input){
+        $stockTransaction = $this->fetchStockTransactionDetail($input["stock_transaction_id"]);
+        $item = $this->itemService->fetchItem($input["item_id"]);
+        $stockTransaction = $this->stockTransactionBuilder->buildStockTransaction($input,$item,$stockTransaction);
+        $this->em->persist($stockTransaction);
+        $this->em->flush();
+        $result["result"] = $stockTransaction;
+        $result["statusCode"] = Response::HTTP_OK;
+        return $result;
+    }
+
+    public function confirmStockTransaction($id){
+        $stockTransaction = $this->fetchStockTransactionDetail($id);
+        $stockTransaction = $this->em->getRepository('AppBundle:StockTransaction')->confirmStockTransaction($stockTransaction);
+        $result["result"] = $stockTransaction;
+        $result["statusCode"] = Response::HTTP_OK;
+        return $result;
+    }
+
+}

@@ -31,9 +31,9 @@ class Item
     /**
      * @var int
      *
-     * @ORM\Column(name="price", type="integer", nullable=true)
+     * @ORM\Column(name="quantity", type="integer", nullable=true)
      */
-    private $price;
+    private $quantity;
 
 
     /**
@@ -71,27 +71,27 @@ class Item
     }
 
     /**
-     * Set price
+     * Set quantity
      *
-     * @param integer $price
+     * @param integer $quantity
      *
      * @return Item
      */
-    public function setPrice($price)
+    public function setQuantity($quantity)
     {
-        $this->price = $price;
+        $this->quantity = $quantity;
 
         return $this;
     }
 
     /**
-     * Get price
+     * Get quantity
      *
      * @return int
      */
-    public function getPrice()
+    public function getQuantity()
     {
-        return $this->price;
+        return $this->quantity;
     }
 }
 
