@@ -38,7 +38,6 @@ class StockTransactionController extends FOSRestController
      *
      * Get Route annotation.
      * @Get("/stock_transaction/list")
-     * @return \FOS\RestBundle\View\View
      */
     public function getStockTransactionListAction()
     {
@@ -118,8 +117,9 @@ class StockTransactionController extends FOSRestController
                 $response["statusCode"] = Response::HTTP_BAD_REQUEST;
             }
         }
+        return new Response(json_encode($response));
 
-        return $this->view($response,200);
+        //return $this->view($response,200);
     }
 
     /**

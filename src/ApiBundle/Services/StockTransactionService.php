@@ -62,7 +62,12 @@ class StockTransactionService
         $stockTransaction = $this->stockTransactionBuilder->buildStockTransaction($input,$item);
         $this->em->persist($stockTransaction);
         $this->em->flush();
-        $result["result"] = $stockTransaction;
+
+        $result["result"]['id'] = $stockTransaction->getId();
+        $result["result"]['itemId'] = $stockTransaction->getItemId();
+        $result["result"]['quantity'] = $stockTransaction->getQuantity();
+        $result["result"]['incomingStock'] = $stockTransaction->getIncomingStock();
+        $result["result"]['confirmationStatus'] = $stockTransaction->getConfirmationStatus();
         $result["statusCode"] = Response::HTTP_OK;
         return $result;
     }
