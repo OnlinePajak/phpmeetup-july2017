@@ -60,6 +60,7 @@ class StockTransactionService
     public function createStockTransaction($input){
         $item = $this->itemService->fetchItem($input["item_id"]);
         $stockTransaction = $this->stockTransactionBuilder->buildStockTransaction($input,$item);
+        $stockTransaction = $this->em->getRepository('AppBundle:StockTransaction')->confirmStockTransaction($stockTransaction);
         $this->em->persist($stockTransaction);
         $this->em->flush();
 
@@ -89,6 +90,28 @@ class StockTransactionService
         $result["result"] = $stockTransaction;
         $result["statusCode"] = Response::HTTP_OK;
         return $result;
+    }
+
+    public function removeStockTransaction($id){
+        $stockTransaction = $this->em->getRepository('AppBundle:StockTransaction')->find($id);
+        //echo "<pre>"; print_r($stockTransaction);exit;
+
+        if($stockTransaction){
+            $this->em->remove($stockTransaction);
+            $this->em->flush();
+
+            $result["result"]['itemId'] = $stockTransaction->getItemId();
+            $result["result"]['quantity'] = $stockTransaction->getQuantity();
+            $result["result"]['incomingStock'] = $stockTransaction->getIncomingStock();
+            $result["result"]['confirmationStatus'] = $stockTransaction->getConfirmationStatus();
+            $result["statusCode"] = Response::HTTP_OK;
+
+            return $result;
+        }else{
+            throw new \Exception('Something went wrong! The id is not available.');
+        }
+
+
     }
 
 }
