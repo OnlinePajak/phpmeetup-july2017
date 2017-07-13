@@ -1,0 +1,4 @@
+services:
+    meetup.common:
+        class: AppBundle\Services\CommonService
+        arguments: [ "@doctrine.orm.entity_manager" ]

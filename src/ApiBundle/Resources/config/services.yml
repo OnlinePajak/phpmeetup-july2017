@@ -1,15 +1,15 @@
 services:
     meetup.api.user:
         class: ApiBundle\Services\UserService
-        arguments: [ "@doctrine.orm.entity_manager" ]
+        arguments: [ "@doctrine.orm.entity_manager", "@meetup.common" ]
 
     meetup.api.item:
         class: ApiBundle\Services\ItemService
-        arguments: [ "@doctrine.orm.entity_manager" ]
+        arguments: [ "@doctrine.orm.entity_manager", "@meetup.common" ]
 
     meetup.api.stock_transaction:
         class: ApiBundle\Services\StockTransactionService
-        arguments: [ "@doctrine.orm.entity_manager" ]
+        arguments: [ "@doctrine.orm.entity_manager", "@meetup.common" ]
 
     meetup.builder.stock_transaction:
          class: ApiBundle\Builder\StockTransactionBuilder

@@ -8,35 +8,33 @@
 
 namespace ApiBundle\Services;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use AppBundle\Services\CommonService;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
-use Symfony\Bridge\Monolog\Logger;
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class ItemService
 {
-    public function __construct(EntityManagerInterface $em)
+    private $em;
+    private $commonService;
+    private $result;
+
+    public function __construct(EntityManagerInterface $em, CommonService $commonService)
     {
         $this->em = $em;
+        $this->commonService = $commonService;
+        $this->result = $this->commonService->setPredefinedResult();
     }
 
     public function fetchAllItems(){
-        $items = $this->em->getRepository('AppBundle:Item')->findAll();
-        $result["result"] = $items;
-        $result["statusCode"] = Response::HTTP_OK;
-        return $result;
+        $items = $this->commonService->fetchItemObject();
+        $this->result = $this->commonService->setResult($items);
+        return $this->result;
     }
 
     public function fetchItem($id){
-        $item = $this->em->getRepository('AppBundle:Item')->find($id);
-        $result["result"] = $item;
-        $result["statusCode"] = Response::HTTP_OK;
-        return $result;
+        $item = $this->commonService->fetchItemObject($id);
+        if($item){
+            $this->result = $this->commonService->setResult($item);
+        }
+        return $this->result;
     }
 }

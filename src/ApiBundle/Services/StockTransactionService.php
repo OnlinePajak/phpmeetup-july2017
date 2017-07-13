@@ -9,123 +9,104 @@
 namespace ApiBundle\Services;
 
 use ApiBundle\Builder\StockTransactionBuilder;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Util\Debug;
+use AppBundle\Services\CommonService;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
-use Symfony\Bridge\Monolog\Logger;
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class StockTransactionService
 {
     private $em;
-    private $itemService;
+    private $commonService;
     private $stockTransactionBuilder;
     private $result;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, CommonService $commonService)
     {
         $this->em = $em;
-        $this->itemService = new ItemService($em);
         $this->stockTransactionBuilder = new StockTransactionBuilder();
-        $this->result["result"] = null;
-        $this->result["statusCode"] = Response::HTTP_BAD_REQUEST;
-        $this->result["message"] = "Data is not existed";
-    }
-
-    public function fetchData($entity, $id = null)
-    {
-        if ($id) {
-            $object = $this->em->getRepository($entity)->find($id);
-        } else {
-            $object = $this->em->getRepository($entity)->findAll();
-        }
-
-        return $object;
+        $this->commonService = $commonService;
+        $this->result = $this->commonService->setPredefinedResult();
     }
 
     public function fetchStockTransactionList()
     {
-        $stockTransactions = $this->fetchData('AppBundle:StockTransaction');
-        $result["result"] = $stockTransactions;
-        $result["statusCode"] = Response::HTTP_OK;
-        return $result;
+        $stockTransactionObjects = $this->commonService->fetchStockTransactionObject();
+        $this->result = $this->commonService->setResult($stockTransactionObjects);
+        return $this->result;
     }
 
     public function fetchStockTransactionDetail($id)
     {
-        $stockTransaction = $this->fetchData('AppBundle:StockTransaction', $id);
-        $result["result"] = $stockTransaction;
-        $result["statusCode"] = Response::HTTP_OK;
-        return $result;
+        $stockTransactionObject = $this->commonService->fetchStockTransactionObject($id);
+        if ($stockTransactionObject) {
+            $this->result = $this->commonService->setResult($stockTransactionObject);
+        }
+
+        return $this->result;
     }
 
     public function createStockTransaction($input)
     {
-        $itemObject = $this->fetchData('AppBundle:Item', $input["item_id"]);
+        $itemObject = $this->commonService->fetchItemObject($input["item_id"]);
         $stockTransactionObject = $this->stockTransactionBuilder->buildStockTransaction($input, $itemObject);
         $this->em->persist($stockTransactionObject);
         $this->em->flush();
 
-        $result["result"] = $stockTransactionObject;
-        $result["statusCode"] = Response::HTTP_OK;
-        return $result;
+        $this->result = $this->commonService->setResult($stockTransactionObject);
+        return $this->result;
     }
 
     public function updateStockTransaction($input)
     {
-        $result["result"] = null;
-        $result["statusCode"] = Response::HTTP_BAD_REQUEST;
-        $result["message"] = "Data is not existed";
+        $stockTransactionObject = $this->commonService->fetchStockTransactionObject($input["id"]);
 
-        $stockTransactionObject = $this->fetchData('AppBundle:StockTransaction', $input["id"]);
-        if($stockTransactionObject){
-            $itemObject = $this->fetchData('AppBundle:Item', $stockTransactionObject->getItemId());
-            if($stockTransactionObject && $itemObject){
-                $stockTransactionObject = $this->stockTransactionBuilder->buildStockTransaction($input, $itemObject, $stockTransactionObject);
-                $this->em->persist($stockTransactionObject);
-                $this->em->flush();
-                $result["result"] = $stockTransactionObject;
-                $result["statusCode"] = Response::HTTP_OK;
-                $result["message"] = "SUCCESS";
-            }
+        if ($stockTransactionObject) {
+            $itemObject = $stockTransactionObject->getItem();
+            $stockTransactionObject = $this->stockTransactionBuilder->buildStockTransaction($input, $itemObject, $stockTransactionObject);
+            $this->em->persist($stockTransactionObject);
+            $this->em->flush();
+            $this->result = $this->commonService->setResult($stockTransactionObject);
         }
 
-
-        return $result;
+        return $this->result;
     }
 
     public function confirmStockTransaction($id)
     {
-        $stockTransactionObject = $this->fetchData('AppBundle:StockTransaction', $id);
-        $itemObject = $this->fetchData('AppBundle:Item', $stockTransactionObject->getItemId());
+        $stockTransactionObject = $this->commonService->fetchStockTransactionObject($id);
+        $itemObject = $stockTransactionObject->getItem();
 
-        $result["statusCode"] = Response::HTTP_OK;
-        return $result;
+        if ($stockTransactionObject && $itemObject) {
+            $incomingStockStatus = $stockTransactionObject->getIncomingStock();
+            $transactionQuantity = $stockTransactionObject->getQuantity();
+            $itemQuantity = $itemObject->getQuantity();
+            if($incomingStockStatus==1){
+                $itemQuantity += $transactionQuantity;
+            }else{
+                $itemQuantity -= $transactionQuantity;
+                if($itemQuantity < 0) $itemQuantity = 0;
+            }
+            $itemObject->setQuantity($itemQuantity);
+            $this->em->persist($itemObject);
+            $this->em->flush();
+            $this->result = $this->commonService->setResult($itemObject);
+        }
+
+        return $this->result;
     }
 
     public function removeStockTransaction($id)
     {
-
-
-        $stockTransaction = $this->fetchData('AppBundle:StockTransaction', $id);
-        if ($stockTransaction) {
-            $this->em->remove($stockTransaction);
+        $stockTransactionObject = $this->commonService->fetchStockTransactionObject($id);
+        if ($stockTransactionObject) {
+            $this->em->remove($stockTransactionObject);
             $this->em->flush();
 
-            $result["result"] = $stockTransaction;
-            $result["statusCode"] = Response::HTTP_OK;
-            $result["message"] = "SUCCESS";
-            return $result;
+            $this->result = $this->commonService->setResult($stockTransactionObject);
         }
 
-        return $result;
-
+        return $this->result;
     }
 
 }
