@@ -2,6 +2,14 @@ html, body{
 	font-family: 'Open Sans', sans-serif;
 }
 
+.dataTables_info{
+	display: none;
+}
+
+.dataTables_paginate{
+	display: none;
+}
+
 .itemlist-table {
 	max-width: 900px;
 	margin: 30px 0px 30px 30px;

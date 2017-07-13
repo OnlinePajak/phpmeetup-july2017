@@ -88,7 +88,7 @@ class CommonService
     {
         if(count($vars) > 0){
             foreach ($vars as $item) {
-                $result["result"][] = $item;
+                $result["data"][] = $item;
             }
         }
 
