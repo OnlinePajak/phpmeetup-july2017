@@ -49,6 +49,6 @@ class ItemController extends FOSRestController
                 $response["statusCode"] = Response::HTTP_BAD_REQUEST;
             }
         }
-        return new Response(json_encode($response));
+        return new Response($this->container->get('jms_serializer')->serialize($response, 'json'));
     }
 }
