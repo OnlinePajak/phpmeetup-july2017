@@ -19,6 +19,8 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * @\FOS\RestBundle\Controller\Annotations\Route("/api")
@@ -26,14 +28,6 @@ use Symfony\Component\HttpFoundation\Response;
 class StockTransactionController extends FOSRestController
 {
     /**
-     * @ApiDoc(
-     *   resource = true,
-     *   section= "Stock Transaction",
-     *   description = "Get Stock Transaction List",
-     *   views = {"meetup"}
-     * )
-     *
-     *
      * @Route(requirements={"_format"="json|xml"})
      *
      * Get Route annotation.
@@ -49,18 +43,11 @@ class StockTransactionController extends FOSRestController
                 $response["statusCode"] = Response::HTTP_BAD_REQUEST;
             }
         }
-        return new Response(json_encode($response));
+
+        return new Response($this->container->get('jms_serializer')->serialize($response, 'json'));
     }
 
     /**
-     * @ApiDoc(
-     *   resource = true,
-     *   section= "Stock Transaction",
-     *   description = "Get Stock Transaction Detail",
-     *   views = {"meetup"}
-     * )
-     *
-     *
      * @Route(requirements={"_format"="json|xml"})
      *
      * Get Route annotation.
@@ -78,29 +65,11 @@ class StockTransactionController extends FOSRestController
             }
         }
 
-        return new Response(json_encode($response));
+        return new Response($this->container->get('jms_serializer')->serialize($response, 'json'));
     }
 
 
     /**
-     * @ApiDoc(
-     *   resource = true,
-     *   section= "Stock Transaction",
-     *
-     *   input={
-     *    "class" = "ApiBundle\Form\Type\PostStockTransactionType",
-     *    "options" = {"method" = "POST"},
-     *    "name" = ""
-     *   },
-     *   description = "Creates a new sales invoice from the submitted data.",
-     *   statusCodes = {
-     *     200 = "Returned when successful",
-     *     400 = "Returned when bad parameters are passed"
-     *   },
-     *     views = {"meetup"}
-     * )
-     *
-     *
      * @Route(requirements={"_format"="json|xml"})
      *
      * POST Route annotation.
@@ -117,34 +86,21 @@ class StockTransactionController extends FOSRestController
                 $response["statusCode"] = Response::HTTP_BAD_REQUEST;
             }
         }
-        return new Response(json_encode($response));
-
-        //return $this->view($response,200);
+        return new Response($this->container->get('jms_serializer')->serialize($response, 'json'));
     }
 
     /**
-     * @ApiDoc(
-     *   resource = true,
-     *   section= "Stock Transaction",
-     *   input={
-     *      "class" = "ApiBundle\Form\Type\PutStockTransactionType",
-     *      "options" = {"method" = "PUT"},
-     *      "name" = ""
-     *   },
-     *   description = "Update a stock transaction",
-     *   views = {"meetup"}
-     * )
-     *
-     *
      * @Route(requirements={"_format"="json|xml"})
      *
      * PUT Route annotation.
      * @Put("/stock_transaction")
-     * @return \FOS\RestBundle\View\View
      */
     public function putStockTransactionAction(Request $request)
     {
         $input = $request->request->all();
+
+        var_dump($input);exit;
+
         try {
             $response = $this->get('meetup.api.stock_transaction')->updateStockTransaction($input);
         } catch (Exception $e) {
@@ -154,22 +110,14 @@ class StockTransactionController extends FOSRestController
             }
         }
 
-        return new Response(json_encode($response));
+        return new Response($this->container->get('jms_serializer')->serialize($response, 'json'));
     }
 
     /**
-     * @ApiDoc(
-     *   resource = true,
-     *   section= "Stock Transaction",
-     *   description = "Delete a stock transaction",
-     *   views = {"meetup"}
-     * )
-     *
-     *
      * @Route(requirements={"_format"="json|xml"})
      *
      * PUT Route annotation.
-     * @Put("/stock_transaction")
+     * @Put("/stock_transaction/confirm/{id}")
      * @return \FOS\RestBundle\View\View
      */
     public function putStockConfirmationAction($id)
@@ -183,22 +131,10 @@ class StockTransactionController extends FOSRestController
             }
         }
 
-        return new Response(json_encode($response));
+        return new Response($this->container->get('jms_serializer')->serialize($response, 'json'));
     }
 
     /**
-     * @ApiDoc(
-     *   resource = true,
-     *   section= "Stock Transaction",
-     *   description = "Creates a new sales invoice from the submitted data.",
-     *   statusCodes = {
-     *     200 = "Returned when successful",
-     *     400 = "Returned when bad parameters are passed"
-     *   },
-     *     views = {"meetup"}
-     * )
-     *
-     *
      * @Route(requirements={"_format"="json|xml"})
      *
      * DELETE Route annotation.
@@ -215,6 +151,6 @@ class StockTransactionController extends FOSRestController
             }
         }
 
-        return new Response(json_encode($response));
+        return new Response($this->container->get('jms_serializer')->serialize($response, 'json'));
     }
 }

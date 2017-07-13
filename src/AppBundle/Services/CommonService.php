@@ -28,6 +28,8 @@ class CommonService
 {
     private $em;
 
+    private $serializer;
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
@@ -82,11 +84,24 @@ class CommonService
         return $result;
     }
 
-    public function setResult($result)
+    public function setResult($vars)
     {
-        $result["result"] = $result;
+        if(count($vars) > 0){
+            foreach ($vars as $item) {
+                $result["result"][] = $item;
+            }
+        }
+
         $result["statusCode"] = Response::HTTP_OK;
         $result["message"] = "SUCCESS";
+        return $result;
+    }
+
+    public function setFailedResult($message)
+    {
+        $result["result"] = null;
+        $result["statusCode"] = Response::HTTP_BAD_REQUEST;
+        $result["message"] = $message;
         return $result;
     }
 }

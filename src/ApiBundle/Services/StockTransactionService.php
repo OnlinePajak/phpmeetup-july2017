@@ -10,6 +10,7 @@ namespace ApiBundle\Services;
 
 use ApiBundle\Builder\StockTransactionBuilder;
 use AppBundle\Services\CommonService;
+use Doctrine\Common\Util\Debug;
 use Doctrine\ORM\EntityManagerInterface;
 
 class StockTransactionService
@@ -47,24 +48,37 @@ class StockTransactionService
     public function createStockTransaction($input)
     {
         $itemObject = $this->commonService->fetchItemObject($input["item_id"]);
-        $stockTransactionObject = $this->stockTransactionBuilder->buildStockTransaction($input, $itemObject);
-        $this->em->persist($stockTransactionObject);
-        $this->em->flush();
+        if($itemObject){
+            $stockTransactionObject = $this->stockTransactionBuilder->buildStockTransaction($input, $itemObject);
+            $this->em->persist($stockTransactionObject);
+            $this->em->flush();
+            $this->result = $this->commonService->setResult($stockTransactionObject);
+        }else{
+            $this->result = $this->commonService->setFailedResult("Invalid Item");
+        }
 
-        $this->result = $this->commonService->setResult($stockTransactionObject);
+
+
         return $this->result;
     }
 
     public function updateStockTransaction($input)
     {
+        echo "<pre>"; print_R($input);exit;
         $stockTransactionObject = $this->commonService->fetchStockTransactionObject($input["id"]);
 
         if ($stockTransactionObject) {
             $itemObject = $stockTransactionObject->getItem();
-            $stockTransactionObject = $this->stockTransactionBuilder->buildStockTransaction($input, $itemObject, $stockTransactionObject);
-            $this->em->persist($stockTransactionObject);
-            $this->em->flush();
-            $this->result = $this->commonService->setResult($stockTransactionObject);
+            if($itemObject){
+                $stockTransactionObject = $this->stockTransactionBuilder->buildStockTransaction($input, $itemObject, $stockTransactionObject);
+                $this->em->persist($stockTransactionObject);
+                $this->em->flush();
+                $this->result = $this->commonService->setResult($stockTransactionObject);
+            }else{
+                $this->result = $this->commonService->setFailedResult("Invalid Item");
+            }
+        }else{
+            $this->result = $this->commonService->setFailedResult("Invalid Stock Transaction");
         }
 
         return $this->result;
@@ -75,20 +89,26 @@ class StockTransactionService
         $stockTransactionObject = $this->commonService->fetchStockTransactionObject($id);
         $itemObject = $stockTransactionObject->getItem();
 
-        if ($stockTransactionObject && $itemObject) {
-            $incomingStockStatus = $stockTransactionObject->getIncomingStock();
-            $transactionQuantity = $stockTransactionObject->getQuantity();
-            $itemQuantity = $itemObject->getQuantity();
-            if($incomingStockStatus==1){
-                $itemQuantity += $transactionQuantity;
+        if ($stockTransactionObject) {
+            if($itemObject){
+                $incomingStockStatus = $stockTransactionObject->getIncomingStock();
+                $transactionQuantity = $stockTransactionObject->getQuantity();
+                $itemQuantity = $itemObject->getQuantity();
+                if($incomingStockStatus==1){
+                    $itemQuantity += $transactionQuantity;
+                }else{
+                    $itemQuantity -= $transactionQuantity;
+                    if($itemQuantity < 0) $itemQuantity = 0;
+                }
+                $itemObject->setQuantity($itemQuantity);
+                $this->em->persist($itemObject);
+                $this->em->flush();
+                $this->result = $this->commonService->setResult($itemObject);
             }else{
-                $itemQuantity -= $transactionQuantity;
-                if($itemQuantity < 0) $itemQuantity = 0;
+                $this->result = $this->commonService->setFailedResult("Invalid Item");
             }
-            $itemObject->setQuantity($itemQuantity);
-            $this->em->persist($itemObject);
-            $this->em->flush();
-            $this->result = $this->commonService->setResult($itemObject);
+        }else{
+            $this->result = $this->commonService->setFailedResult("Invalid Stock Transaction");
         }
 
         return $this->result;
@@ -102,6 +122,8 @@ class StockTransactionService
             $this->em->flush();
 
             $this->result = $this->commonService->setResult($stockTransactionObject);
+        }else{
+            $this->result = $this->commonService->setFailedResult("Invalid Stock Transaction");
         }
 
         return $this->result;

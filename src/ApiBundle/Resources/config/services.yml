@@ -12,4 +12,8 @@ services:
         arguments: [ "@doctrine.orm.entity_manager", "@meetup.common" ]
 
     meetup.builder.stock_transaction:
-         class: ApiBundle\Builder\StockTransactionBuilder
+        class: ApiBundle\Builder\StockTransactionBuilder
+
+    meetup.common:
+        class: AppBundle\Services\CommonService
+        arguments: [ "@doctrine.orm.entity_manager" ]
