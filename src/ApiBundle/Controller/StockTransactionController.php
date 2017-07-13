@@ -28,6 +28,14 @@ use JMS\Serializer\Annotation\Exclude;
 class StockTransactionController extends FOSRestController
 {
     /**
+     * @ApiDoc(
+     *   resource = true,
+     *   section= "Stock Transaction",
+     *   description = "Get Stock Transaction List",
+     *   views = {"meetup"}
+     * )
+     *
+     *
      * @Route(requirements={"_format"="json|xml"})
      *
      * Get Route annotation.
@@ -48,6 +56,14 @@ class StockTransactionController extends FOSRestController
     }
 
     /**
+     * @ApiDoc(
+     *   resource = true,
+     *   section= "Stock Transaction",
+     *   description = "Get Stock Transaction Detail",
+     *   views = {"meetup"}
+     * )
+     *
+     *
      * @Route(requirements={"_format"="json|xml"})
      *
      * Get Route annotation.
@@ -70,6 +86,24 @@ class StockTransactionController extends FOSRestController
 
 
     /**
+     * @ApiDoc(
+     *   resource = true,
+     *   section= "Stock Transaction",
+     *
+     *   input={
+     *    "class" = "ApiBundle\Form\Type\PostStockTransactionType",
+     *    "options" = {"method" = "POST"},
+     *    "name" = ""
+     *   },
+     *   description = "Creates a new sales invoice from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when bad parameters are passed"
+     *   },
+     *     views = {"meetup"}
+     * )
+     *
+     *
      * @Route(requirements={"_format"="json|xml"})
      *
      * POST Route annotation.
@@ -90,17 +124,28 @@ class StockTransactionController extends FOSRestController
     }
 
     /**
+     * @ApiDoc(
+     *   resource = true,
+     *   section= "Stock Transaction",
+     *   input={
+     *      "class" = "ApiBundle\Form\Type\PutStockTransactionType",
+     *      "options" = {"method" = "PUT"},
+     *      "name" = ""
+     *   },
+     *   description = "Update a stock transaction",
+     *   views = {"meetup"}
+     * )
+     *
+     *
      * @Route(requirements={"_format"="json|xml"})
      *
      * PUT Route annotation.
      * @Put("/stock_transaction")
+     * @return \FOS\RestBundle\View\View
      */
     public function putStockTransactionAction(Request $request)
     {
         $input = $request->request->all();
-
-        var_dump($input);exit;
-
         try {
             $response = $this->get('meetup.api.stock_transaction')->updateStockTransaction($input);
         } catch (Exception $e) {
@@ -114,10 +159,18 @@ class StockTransactionController extends FOSRestController
     }
 
     /**
+     * @ApiDoc(
+     *   resource = true,
+     *   section= "Stock Transaction",
+     *   description = "Delete a stock transaction",
+     *   views = {"meetup"}
+     * )
+     *
+     *
      * @Route(requirements={"_format"="json|xml"})
      *
      * PUT Route annotation.
-     * @Put("/stock_transaction/confirm/{id}")
+     * @Put("/stock_transaction")
      * @return \FOS\RestBundle\View\View
      */
     public function putStockConfirmationAction($id)
@@ -135,6 +188,18 @@ class StockTransactionController extends FOSRestController
     }
 
     /**
+     * @ApiDoc(
+     *   resource = true,
+     *   section= "Stock Transaction",
+     *   description = "Creates a new sales invoice from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when bad parameters are passed"
+     *   },
+     *     views = {"meetup"}
+     * )
+     *
+     *
      * @Route(requirements={"_format"="json|xml"})
      *
      * DELETE Route annotation.
