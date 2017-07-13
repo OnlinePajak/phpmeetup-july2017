@@ -11,8 +11,6 @@ namespace ApiBundle\Services;
 use ApiBundle\Builder\StockTransactionBuilder;
 use AppBundle\Services\CommonService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class StockTransactionService
 {
