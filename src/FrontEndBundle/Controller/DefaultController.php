@@ -11,7 +11,7 @@ class DefaultController extends Controller
     {
         $items = $this->get('meetup.api.item')->fetchAllItems();
         Debug::dump($items);exit;
-        
+
         return $this->render('FrontEndBundle:Default:index.html.twig' , array(
             "items" => $items
         ));

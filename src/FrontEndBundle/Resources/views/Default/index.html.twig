@@ -43,7 +43,7 @@
         <div role="tabpanel" class="tab-pane fade in active" id="createHistory">
             <form class="form-horizontal create-form">
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Item Name</label>
+                    <label for="inputEmail3-id" class="col-sm-2 control-label">Item Name</label>
                     <div class="col-sm-10">
                         <select id="cboItem" name="cboItem">
                             {% for item in items %}
@@ -55,7 +55,7 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Quantity</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                        <input type="text" class="form-control" id="input2" placeholder="">
                     </div>
                 </div>
                 <div class="form-group">
@@ -69,15 +69,17 @@
                         </label>
                     </div>
                 </div>
-                <button onclick="javascript:alert('asdf');">Submit</button>
+                <button class="submit">Submit</button>
             </form>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="viewHistory">
-            <table id="dataTable-list" class="custom-item-table">
+            <table id="dataTable-list-stock" class="custom-item-table">
                 <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Name</th>
                     <th>Quantity</th>
+                    <th>Stock Transaction</th>
                 </tr>
                 </thead>
             </table>
@@ -102,6 +104,76 @@
             "sDom": 't<"bottom"i><"display-block"p>'
         });
 
+            var eg = $('#dataTable-list-stock').dataTable({
+                bPaginate: false,
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    url: "/api/stock_transaction/list",
+                    type: "GET"
+                },
+                columns: [
+                    {
+                        data: function (data) {
+                            return data.item.id;
+                        }
+                    },
+                    {
+                        data: function(data) {
+                            return data.item.name;
+                        }
+                    },
+                    {
+                        data: function(data) {
+                            return data.quantity;
+                        }
+                    },
+                    {
+                        data: function(data) {
+                            return data.item.stock_transaction[0].quantity;
+                        }
+                    }
+                ]
+            });
+
+        var dg = $('#dataTable-item-list').dataTable({
+            serverSide: true,
+            processing: true,
+            bPaginate: false,
+            ajax: {
+                url: "/api/items/list",
+                type: "GET"
+            },
+            columns: [
+                {
+                    data: function (data) {
+                        return data.name;
+                    }
+                },
+                {
+                    data: function(data) {
+                        return data.quantity;
+                    }
+                }
+            ]
+        });
+
+        $(".submit").click(function () {
+            if(document.getElementById('inlineRadio1').checked) {
+                var type = 0;
+            }else if(document.getElementById('inlineRadio2').checked) {
+                var type = 1;
+            }
+
+            $.ajax({
+                type:'POST',
+                url: '/api/stock_transaction',
+                data: {'item_id': $('#input1').val(),'incoming_stock': type, 'quantity': $('#input2').val()},
+                success: function(response) {
+                    console.log(response);
+                }
+            });
+        });
     });
 </script>
 </html>
