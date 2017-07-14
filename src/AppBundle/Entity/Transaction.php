@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * StockTransaction
+ * Transaction
  *
- * @ORM\Table(name="stockTransaction")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\StockTransactionRepository")
+ * @ORM\Table(name="transaction")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TransactionRepository")
  */
-class StockTransaction
+class Transaction
 {
     /**
      * @var int
@@ -22,7 +22,7 @@ class StockTransaction
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Item", inversedBy="stock_transaction", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Item", inversedBy="transaction", cascade={"persist"})
      * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
      *
      */
@@ -66,7 +66,7 @@ class StockTransaction
      * Set Item
      *
      * @param Item $item
-     * @return StockTransaction
+     * @return Transaction
      */
     public function setItem(Item $item = null)
     {
@@ -90,7 +90,7 @@ class StockTransaction
      *
      * @param integer $quantity
      *
-     * @return StockTransaction
+     * @return Transaction
      */
     public function setQuantity($quantity)
     {

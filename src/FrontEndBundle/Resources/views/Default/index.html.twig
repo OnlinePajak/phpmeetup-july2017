@@ -98,7 +98,7 @@
                 serverSide: true,
                 processing: true,
                 ajax: {
-                    url: "/api/stock_transaction/list",
+                    url: "/api/transaction/list",
                     type: "GET"
                 },
                 columns: [
@@ -166,7 +166,7 @@
             alert($('#inputQuantity').val());*/
             $.ajax({
                 type:'POST',
-                url: '/api/stock_transaction',
+                url: '/api/transaction',
                 data: {'item_id': $('#cboItem').val(), 'quantity': $('#inputQuantity').val()},
                 success: function(response) {
                     //console.log(response);

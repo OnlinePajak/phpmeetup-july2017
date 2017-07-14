@@ -25,13 +25,13 @@ use JMS\Serializer\Annotation\Exclude;
 /**
  * @\FOS\RestBundle\Controller\Annotations\Route("/api")
  */
-class StockTransactionController extends FOSRestController
+class TransactionController extends FOSRestController
 {
     /**
      * @ApiDoc(
      *   resource = true,
-     *   section= "Stock Transaction",
-     *   description = "Get Stock Transaction List",
+     *   section= "Transaction",
+     *   description = "Get Transaction List",
      *   views = {"meetup"}
      * )
      *
@@ -39,12 +39,12 @@ class StockTransactionController extends FOSRestController
      * @Route(requirements={"_format"="json|xml"})
      *
      * Get Route annotation.
-     * @Get("/stock_transaction/list")
+     * @Get("/transaction/list")
      */
-    public function getStockTransactionListAction()
+    public function getTransactionListAction()
     {
         try {
-            $response = $this->get('meetup.api.stock_transaction')->fetchStockTransactionList();
+            $response = $this->get('meetup.api.transaction')->fetchTransactionList();
         } catch (Exception $e) {
             if($e->getMessage()!=null){
                 $response['result'] = $e->getMessage();
@@ -58,8 +58,8 @@ class StockTransactionController extends FOSRestController
     /**
      * @ApiDoc(
      *   resource = true,
-     *   section= "Stock Transaction",
-     *   description = "Get Stock Transaction Detail",
+     *   section= "Transaction",
+     *   description = "Get Transaction Detail",
      *   views = {"meetup"}
      * )
      *
@@ -67,13 +67,13 @@ class StockTransactionController extends FOSRestController
      * @Route(requirements={"_format"="json|xml"})
      *
      * Get Route annotation.
-     * @Get("/stock_transaction/{id}")
+     * @Get("/transaction/{id}")
      * @return \FOS\RestBundle\View\View
      */
-    public function getStockTransactionDetailAction($id)
+    public function getTransactionDetailAction($id)
     {
         try {
-            $response = $this->get('meetup.api.stock_transaction')->fetchStockTransactionDetail($id);
+            $response = $this->get('meetup.api.transaction')->fetchTransactionDetail($id);
         } catch (Exception $e) {
             if($e->getMessage()!=null){
                 $response['result'] = $e->getMessage();
@@ -88,10 +88,10 @@ class StockTransactionController extends FOSRestController
     /**
      * @ApiDoc(
      *   resource = true,
-     *   section= "Stock Transaction",
+     *   section= "Transaction",
      *
      *   input={
-     *    "class" = "ApiBundle\Form\Type\PostStockTransactionType",
+     *    "class" = "ApiBundle\Form\Type\PostTransactionType",
      *    "options" = {"method" = "POST"},
      *    "name" = ""
      *   },
@@ -106,13 +106,13 @@ class StockTransactionController extends FOSRestController
      * @Route(requirements={"_format"="json|xml"})
      *
      * POST Route annotation.
-     * @Post("/stock_transaction")
+     * @Post("/transaction")
      */
-    public function postStockTransactionAction(Request $request)
+    public function postTransactionAction(Request $request)
     {
         $input = $request->request->all();
         try {
-            $response = $this->get('meetup.api.stock_transaction')->createStockTransaction($input);
+            $response = $this->get('meetup.api.transaction')->createTransaction($input);
         } catch (Exception $e) {
             if($e->getMessage()!=null){
                 $response['result'] = $e->getMessage();
@@ -125,9 +125,9 @@ class StockTransactionController extends FOSRestController
     /**
      * @ApiDoc(
      *   resource = true,
-     *   section= "Stock Transaction",
+     *   section= "Transaction",
      *   input={
-     *      "class" = "ApiBundle\Form\Type\PutStockTransactionType",
+     *      "class" = "ApiBundle\Form\Type\PutTransactionType",
      *      "options" = {"method" = "PUT"},
      *      "name" = ""
      *   },
@@ -139,14 +139,14 @@ class StockTransactionController extends FOSRestController
      * @Route(requirements={"_format"="json|xml"})
      *
      * PUT Route annotation.
-     * @Put("/stock_transaction")
+     * @Put("/transaction")
      * @return \FOS\RestBundle\View\View
      */
-    public function putStockTransactionAction(Request $request)
+    public function putTransactionAction(Request $request)
     {
         $input = $request->request->all();
         try {
-            $response = $this->get('meetup.api.stock_transaction')->updateStockTransaction($input);
+            $response = $this->get('meetup.api.transaction')->updateTransaction($input);
         } catch (Exception $e) {
             if($e->getMessage()!=null){
                 $response['result'] = $e->getMessage();
@@ -160,7 +160,7 @@ class StockTransactionController extends FOSRestController
     /**
      * @ApiDoc(
      *   resource = true,
-     *   section= "Stock Transaction",
+     *   section= "Transaction",
      *   description = "Delete a stock transaction",
      *   views = {"meetup"}
      * )
@@ -169,13 +169,13 @@ class StockTransactionController extends FOSRestController
      * @Route(requirements={"_format"="json|xml"})
      *
      * PUT Route annotation.
-     * @Put("/stock_transaction")
+     * @Put("/transaction")
      * @return \FOS\RestBundle\View\View
      */
     public function putStockConfirmationAction($id)
     {
         try {
-            $response = $this->get('meetup.api.stock_transaction')->confirmStockTransaction($id);
+            $response = $this->get('meetup.api.transaction')->confirmTransaction($id);
         } catch (Exception $e) {
             if($e->getMessage()!=null){
                 $response['result'] = $e->getMessage();
@@ -189,7 +189,7 @@ class StockTransactionController extends FOSRestController
     /**
      * @ApiDoc(
      *   resource = true,
-     *   section= "Stock Transaction",
+     *   section= "Transaction",
      *   description = "Creates a new sales invoice from the submitted data.",
      *   statusCodes = {
      *     200 = "Returned when successful",
@@ -202,12 +202,12 @@ class StockTransactionController extends FOSRestController
      * @Route(requirements={"_format"="json|xml"})
      *
      * DELETE Route annotation.
-     * @Delete("/stock_transaction/{id}")
+     * @Delete("/transaction/{id}")
      */
-    public function DeleteStockTransactionAction($id)
+    public function DeleteTransactionAction($id)
     {
         try {
-            $response = $this->get('meetup.api.stock_transaction')->removeStockTransaction($id);
+            $response = $this->get('meetup.api.transaction')->removeTransaction($id);
         } catch (Exception $e) {
             if($e->getMessage()!=null){
                 $response['result'] = $e->getMessage();

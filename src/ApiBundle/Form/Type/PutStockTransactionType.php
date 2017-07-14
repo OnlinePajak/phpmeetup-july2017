@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 
-class PutStockTransactionType extends AbstractType
+class PutTransactionType extends AbstractType
 {
 
     /**
@@ -55,7 +55,7 @@ class PutStockTransactionType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'ApiBundle\Entity\StockTransaction',
+            'data_class' => 'ApiBundle\Entity\Transaction',
             'csrf_protection' => false
         ));
     }
@@ -65,6 +65,6 @@ class PutStockTransactionType extends AbstractType
      */
     public function getName()
     {
-        return 'put_api_stock_transaction';
+        return 'put_api_transaction';
     }
 }
