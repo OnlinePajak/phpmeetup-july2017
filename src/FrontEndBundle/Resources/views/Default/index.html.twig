@@ -92,6 +92,7 @@
             "sDom": 't<"bottom"i><"display-block"p>'
         });
 
+
             var eg = $('#dataTable-list-stock').dataTable({
                 bPaginate: false,
                 serverSide: true,
@@ -134,6 +135,10 @@
                 ]
             });
 
+
+
+
+
         var dg = $('#dataTable-item-list').dataTable({
             serverSide: true,
             processing: true,
@@ -157,16 +162,21 @@
         });
 
         $(".submit").click(function () {
-            alert($('#cboItem').val());
-            alert($('#inputQuantity').val());
+            /*alert($('#cboItem').val());
+            alert($('#inputQuantity').val());*/
             $.ajax({
                 type:'POST',
                 url: '/api/stock_transaction',
                 data: {'item_id': $('#cboItem').val(), 'quantity': $('#inputQuantity').val()},
                 success: function(response) {
-                    console.log(response);
+                    //console.log(response);
+                    return false;
                 }
             });
+            //$('#dataTable-list-stock').ajax.reload();
+            /*$('#dataTable-list-stock').dataTable.fnClearTable();
+            $('#dataTable-list-stock').dataTable.fnDraw();*/
+            return false;
         });
     });
 </script>
