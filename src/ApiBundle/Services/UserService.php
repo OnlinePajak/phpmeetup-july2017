@@ -2,6 +2,7 @@
 namespace ApiBundle\Services;
 
 use AppBundle\Services\CommonService;
+use Doctrine\Common\Util\Debug;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UserService

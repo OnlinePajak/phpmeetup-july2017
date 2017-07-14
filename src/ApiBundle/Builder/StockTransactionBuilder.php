@@ -18,10 +18,10 @@ class StockTransactionBuilder
         if($stockTransaction == null){
             $stockTransaction = new StockTransaction();
         }
-        $stockTransaction->setIncomingStock($params["incoming_stock"]);
         $stockTransaction->setQuantity($params["quantity"]);
         $stockTransaction->setItem($item);
-        $stockTransaction->setConfirmationStatus(0);
+        $stockTransaction->setItemPrice($params["item_price"]);
+        $stockTransaction->setSubtotalPrice($params["subtotal_price"]);
         return $stockTransaction;
     }
 }

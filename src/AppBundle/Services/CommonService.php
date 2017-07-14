@@ -84,12 +84,16 @@ class CommonService
         return $result;
     }
 
-    public function setResult($vars)
+    public function setResult($val)
     {
-        if(count($vars) > 0){
-            foreach ($vars as $item) {
-                $result["data"][] = $item;
+        if(is_array($val)){
+            if(count($val) > 0){
+                foreach ($val as $item) {
+                    $result["data"][] = $item;
+                }
             }
+        }else{
+            $result["data"][0] = $val;
         }
 
         $result["statusCode"] = Response::HTTP_OK;

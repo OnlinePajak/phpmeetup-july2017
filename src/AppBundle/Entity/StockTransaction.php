@@ -38,16 +38,18 @@ class StockTransaction
     /**
      * @var int
      *
-     * @ORM\Column(name="incoming_stock", type="integer", length=1, nullable=false)
+     * @ORM\Column(name="item_price", type="integer", options={"default" = 0})
      */
-    private $incomingStock;
+    private $itemPrice;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="confirmation_status", type="integer", options={"default" = 0})
+     * @ORM\Column(name="subtotal_price", type="integer", options={"default" = 0})
      */
-    private $confirmationStatus;
+    private $subtotal_price;
+
+
 
 
     /**
@@ -110,33 +112,33 @@ class StockTransaction
     /**
      * @return int
      */
-    public function getConfirmationStatus()
+    public function getItemPrice()
     {
-        return $this->confirmationStatus;
+        return $this->itemPrice;
     }
 
     /**
-     * @param int $confirmationStatus
+     * @param int $itemPrice
      */
-    public function setConfirmationStatus($confirmationStatus)
+    public function setItemPrice($itemPrice)
     {
-        $this->confirmationStatus = $confirmationStatus;
+        $this->itemPrice = $itemPrice;
     }
 
     /**
      * @return int
      */
-    public function getIncomingStock()
+    public function getSubtotalPrice()
     {
-        return $this->incomingStock;
+        return $this->subtotal_price;
     }
 
     /**
-     * @param int $incomingStock
+     * @param int $subtotal_price
      */
-    public function setIncomingStock($incomingStock)
+    public function setSubtotalPrice($subtotal_price)
     {
-        $this->incomingStock = $incomingStock;
+        $this->subtotal_price = $subtotal_price;
     }
 
 }

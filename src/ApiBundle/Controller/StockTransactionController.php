@@ -95,7 +95,6 @@ class StockTransactionController extends FOSRestController
      *    "options" = {"method" = "POST"},
      *    "name" = ""
      *   },
-     *   description = "Creates a new sales invoice from the submitted data.",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when bad parameters are passed"

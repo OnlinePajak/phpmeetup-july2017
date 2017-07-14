@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 </head>
 <body>
-<h1>Welcome, user192381</h1>
+<h1>Welcome, {{ user.name }}</h1>
 <div class="itemlist-table">
     <h2><strong>Product List</strong></h2>
     <table id="dataTable-item-list"  class="custom-item-table">
@@ -40,7 +40,7 @@
         <div role="tabpanel" class="tab-pane fade in active" id="createHistory">
             <form class="form-horizontal create-form">
                 <div class="form-group">
-                    <label for="inputEmail3-id" class="col-sm-2 control-label">Item Name</label>
+                    <label for="itemName" class="col-sm-2 control-label">Item Name</label>
                     <div class="col-sm-10">
                         <select id="cboItem" name="cboItem">
                             {% for item in items %}
@@ -50,20 +50,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Quantity</label>
+                    <label for="quantity" class="col-sm-2 control-label">Quantity</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="input2" placeholder="">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Incoming</label>
-                    <div class="col-sm-10">
-                        <label class="radio-inline">
-                            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Yes
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> No
-                        </label>
+                        <input type="text" class="form-control" id="inputQuantity" placeholder="">
                     </div>
                 </div>
                 <button class="submit">Submit</button>
@@ -76,7 +65,8 @@
                     <th>Id</th>
                     <th>Name</th>
                     <th>Quantity</th>
-                    <th>Stock Transaction</th>
+                    <th>Price</th>
+                    <th>Subtotal</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -113,7 +103,7 @@
                 columns: [
                     {
                         data: function (data) {
-                            return data.item.id;
+                            return data.id;
                         }
                     },
                     {
@@ -128,7 +118,12 @@
                     },
                     {
                         data: function(data) {
-                            return data.item.stock_transaction[0].quantity;
+                            return data.item_price;
+                        }
+                    },
+                    {
+                        data: function(data) {
+                            return data.subtotal_price;
                         }
                     },
                     {
@@ -155,23 +150,19 @@
                 },
                 {
                     data: function(data) {
-                        return data.quantity;
+                        return data.price;
                     }
                 }
             ]
         });
 
         $(".submit").click(function () {
-            if(document.getElementById('inlineRadio1').checked) {
-                var type = 0;
-            }else if(document.getElementById('inlineRadio2').checked) {
-                var type = 1;
-            }
-
+            alert($('#cboItem').val());
+            alert($('#inputQuantity').val());
             $.ajax({
                 type:'POST',
                 url: '/api/stock_transaction',
-                data: {'item_id': $('#input1').val(),'incoming_stock': type, 'quantity': $('#input2').val()},
+                data: {'item_id': $('#cboItem').val(), 'quantity': $('#inputQuantity').val()},
                 success: function(response) {
                     console.log(response);
                 }

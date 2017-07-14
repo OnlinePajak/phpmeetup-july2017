@@ -49,6 +49,8 @@ class StockTransactionService
     {
         $itemObject = $this->commonService->fetchItemObject($input["item_id"]);
         if($itemObject){
+            $input["item_price"] = $itemObject->getPrice();
+            $input["subtotal_price"] = $input["quantity"] * $input["item_price"];
             $stockTransactionObject = $this->stockTransactionBuilder->buildStockTransaction($input, $itemObject);
             $this->em->persist($stockTransactionObject);
             $this->em->flush();
@@ -64,12 +66,13 @@ class StockTransactionService
 
     public function updateStockTransaction($input)
     {
-        echo "<pre>"; print_R($input);exit;
         $stockTransactionObject = $this->commonService->fetchStockTransactionObject($input["id"]);
 
         if ($stockTransactionObject) {
             $itemObject = $stockTransactionObject->getItem();
             if($itemObject){
+                $input["item_price"] = $itemObject->getPrice();
+                $input["subtotal_price"] = $input["quantity"] * $input["item_price"];
                 $stockTransactionObject = $this->stockTransactionBuilder->buildStockTransaction($input, $itemObject, $stockTransactionObject);
                 $this->em->persist($stockTransactionObject);
                 $this->em->flush();
