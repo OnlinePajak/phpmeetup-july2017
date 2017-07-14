@@ -9,7 +9,7 @@
 namespace AppBundle\Services;
 
 use AppBundle\Entity\Item;
-use AppBundle\Entity\StockTransaction;
+use AppBundle\Entity\Transaction;
 use AppBundle\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Util\Debug;
@@ -36,14 +36,14 @@ class CommonService
     }
 
     /**
-     * @return StockTransaction
+     * @return Transaction
      */
-    public function fetchStockTransactionObject($id = null)
+    public function fetchTransactionObject($id = null)
     {
         if ($id) {
-            $result = $this->em->getRepository('AppBundle:StockTransaction')->find($id);
+            $result = $this->em->getRepository('AppBundle:Transaction')->find($id);
         } else {
-            $result = $this->em->getRepository('AppBundle:StockTransaction')->findAll();
+            $result = $this->em->getRepository('AppBundle:Transaction')->findAll();
         }
 
         return $result;

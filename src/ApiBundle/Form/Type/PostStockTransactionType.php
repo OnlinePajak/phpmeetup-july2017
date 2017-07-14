@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class PostStockTransactionType extends AbstractType
+class PostTransactionType extends AbstractType
 {
 
     /**
@@ -54,6 +54,6 @@ class PostStockTransactionType extends AbstractType
      */
     public function getName()
     {
-        return 'post_api_stock_transaction';
+        return 'post_api_transaction';
     }
 }

@@ -36,11 +36,11 @@ class Item
     private $price;
 
     /**
-     * @var stockTransaction
-     * @ORM\OneToMany(targetEntity="StockTransaction", mappedBy="item", cascade={"persist","remove"})
+     * @var transaction
+     * @ORM\OneToMany(targetEntity="Transaction", mappedBy="item", cascade={"persist","remove"})
      *
      */
-    private $stockTransaction;
+    private $transaction;
 
 
     /**
