@@ -100,23 +100,5 @@ class Item
     {
         return $this->quantity;
     }
-
-    /**
-     * @param ArrayCollection $stockTransaction
-     */
-    public function setStockTransaction($stockTransaction)
-    {
-        $this->stockTransaction = $stockTransaction;
-    }
-
-    /**
-     * Get stockTransaction
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getStockTransaction()
-    {
-        return $this->stockTransaction;
-    }
 }
 

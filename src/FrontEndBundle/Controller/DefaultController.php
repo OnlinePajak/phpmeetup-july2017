@@ -10,7 +10,7 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $items = $this->get('meetup.api.item')->fetchAllItems();
-        Debug::dump($items);exit;
+        $items = $items["data"];
 
         return $this->render('FrontEndBundle:Default:index.html.twig' , array(
             "items" => $items
