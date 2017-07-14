@@ -16,12 +16,12 @@
 <body>
 <h1>Welcome, user192381</h1>
 <div class="itemlist-table">
-    <h2><strong>Item List</strong></h2>
+    <h2><strong>Product List</strong></h2>
     <table id="dataTable-item-list"  class="custom-item-table">
         <thead>
         <tr>
             <th>Name</th>
-            <th>Quantity</th>
+            <th>Price</th>
         </tr>
         </thead>
     </table>
@@ -77,6 +77,7 @@
                     <th>Name</th>
                     <th>Quantity</th>
                     <th>Stock Transaction</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
             </table>
@@ -128,6 +129,11 @@
                     {
                         data: function(data) {
                             return data.item.stock_transaction[0].quantity;
+                        }
+                    },
+                    {
+                        data: function(data){
+                            return '<button>Delete</button>'
                         }
                     }
                 ]
